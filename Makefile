@@ -1,8 +1,6 @@
 # Environment variables for development
 export NODE_ENV := development
-
 export WEB_CLIENT_PORT := 3000
-
 export WEB_API_PORT := 3001
 
 .PHONY: yarn dev-start build docker-clean
