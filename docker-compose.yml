@@ -1,0 +1,46 @@
+services:
+  proxy:
+    container_name: nginx
+    image: nginx
+    volumes:
+      - ./proxy:/etc/nginx/templates
+    networks:
+      - app_network
+    ports:
+      - 80:80
+    environment:
+      WEB_API_PORT: "${WEB_API_PORT}"
+      WEB_CLIENT_PORT: "${WEB_CLIENT_PORT}"
+    depends_on:
+      - api
+      - web
+  web:
+    container_name: web
+    image: web
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile.${NODE_ENV}
+    restart: always
+    ports:
+      - "${WEB_CLIENT_PORT}:${WEB_CLIENT_PORT}"
+    volumes:
+      - ./apps/web:/capybara/apps/web
+    networks:
+      - app_network
+  api:
+    container_name: api
+    image: api
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile.${NODE_ENV}
+    restart: always
+    ports:
+      - "${WEB_API_PORT}:${WEB_API_PORT}"
+    volumes:
+      - ./apps/api:/capybara/apps/api
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    external: true

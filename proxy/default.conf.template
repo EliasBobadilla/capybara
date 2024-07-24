@@ -1,0 +1,11 @@
+server {
+  client_max_body_size 5M;
+  listen 80;
+  location / {
+    proxy_pass http://web:${WEB_CLIENT_PORT};
+  }
+  location /api {
+    proxy_pass http://api:${WEB_API_PORT};
+    proxy_set_header Host $host;
+  }
+}

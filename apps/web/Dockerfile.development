@@ -1,0 +1,17 @@
+FROM node:18-alpine
+
+RUN apk add --no-cache libc6-compat
+
+RUN yarn global add turbo
+
+WORKDIR /capybara
+
+COPY . .
+
+# RUN turbo prune api --docker
+
+RUN yarn ci
+
+CMD ["turbo", "dev", "--filter=web..."]
+# CMD ["turbo", "dev", "--filter=./apps/web"] It also runs with the project path
+
