@@ -4,6 +4,14 @@ server {
   location / {
     proxy_pass http://web:${WEB_CLIENT_PORT};
   }
+  location /_next/webpack-hmr {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $host;
+    proxy_pass http://web:${WEB_CLIENT_PORT};
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
   location /api {
     proxy_pass http://api:${WEB_API_PORT};
     proxy_set_header Host $host;
